@@ -1,0 +1,5 @@
+# Ne JAMAIS commit les secrets en clair
+secrets.env
+*.env
+!*.env.age
+_roundtrip*
