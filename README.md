@@ -1,10 +1,12 @@
-# dr-secrets — secrets chiffres age
+# dr-secrets — secrets chiffres age (repo PUBLIC)
 
-Ce repo prive contient **le seul fichier** `secrets.env.age` : les secrets de David chiffres avec `age`, portables entre CCWeb, CCDD, PowerShell local et Codespace.
+Ce repo **PUBLIC** contient **le seul fichier** `secrets.env.age` : les secrets de David chiffres avec `age`, portables entre CCWeb, CCDD, PowerShell local et Codespace.
 
 Correspond a **IDEE_infra_129** (Bootstrap secrets portable methode B) — voir `dr-context/docs/DR/DR_Professionnel/IDEAS_PRO.md`.
 
 **MAJ S136a-ccdd (IDEE_infra_149 LIVREE)** : pipeline `bw get notes | age -d` valide bout en bout. La cle privee `age` est stockee dans Bitwarden vault (note `age keys.txt dr-secrets`). Le fichier local `C:\Users\conta\.cc-secrets\secrets.env` devient transitoire (supprime session S138 apres 2-3 sessions de validation en production).
+
+**MAJ S137a-ccdd (IDEE_infra_172 LIVREE)** : documentation explicite de la visibilite PUBLIC du repo + justification technique (jamais documentee jusqu'ici -- Cor David S137a-ccdd). Le repo a ete cree PUBLIC des le depart (2026-08-31, PublicEvent GitHub audit). Justification : `secrets.env.age` est chiffre avec `age` (XChaCha20-Poly1305 + X25519, equivalent AES-256, incassable sans cle privee en Bitwarden 2FA), historique git clean verifie (aucun secret jamais commite en clair). Modele standard sops/git-crypt/ansible-vault/age. Aucun vecteur d'attaque ajoute vs un repo prive (les vecteurs reels -- compromission Bitwarden, vol fichier local dechiffre, malware -- existent des les deux cas). Cette visibilite PUBLIC **debloque** `bash <(curl -sSL https://raw.githubusercontent.com/DevDaveRug/dr-secrets/main/scripts/bootstrap-ccweb.sh)` sur les sessions CCWeb ephemeres (Codespace, container Claude Code Web) qui n'ont pas d'auth GitHub configuree. Ce qui est expose publiquement : la TAILLE du fichier chiffre (6508 octets, permet d'estimer "~30 variables") + la cle publique age (deja publique par design, voir ci-dessous). Ce qui reste protege : le contenu dechiffre (impossible sans cle privee).
 
 ## Cle publique (recipient)
 
